@@ -1,5 +1,5 @@
 // URL da nossa API Pyhton(Flask)
-const API_URL = 'https://127.0.0.1:5000/api/ativos';
+const API_URL = 'http://127.0.0.1:5000/api/ativos';
 
 
 /**
@@ -90,8 +90,7 @@ async function salvarAporte() {
 
         if (!resposta.ok) {
             // Se a resposta for OK
-            const modal = bootstrap.Modal.getInstance(document.getElementById('modalAporte'));
-            modal.hide();
+            const modal = bootstrap.Modal.getInstance(document.getElementById('modalAporte')).hide();
 
             //Limpa os dados do formulario
             document.getElementById('form-aporte').reset();

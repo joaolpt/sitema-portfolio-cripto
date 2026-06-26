@@ -58,3 +58,51 @@ function formatarData(dataString) {
 
 //Depois do HTML ser carregado, chama a função para carregar os ativos
 document.addEventListener('DOMContentLoaded', carregarAtivos);
+
+/**
+ * Função que captura os dados do formulario html
+ */
+async function salvarAporte() {
+    // Captura os dados digitados
+    const nome = document.getElementById('nome_moeda').value;
+    const sigla = document.getElementById('sigla').value;
+    // convertendo texto para numero, para o banco de dados
+    const quantidade = parseFloat(document.getElementById('quantidade').value);
+    const valor = parseFloat(document.getElementById('valor_investido').value);
+
+    //monta o Json
+    const novoAporte = {
+        nome_moeda: nome,
+        sigla: sigla,
+        quantidade: quantidade,
+        valor_investido: valor
+    };
+
+    try {
+        //Requisição POST para o Flask
+        const resposta = await fetch(API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(novoAporte)
+        });
+
+        if (!resposta.ok) {
+            // Se a resposta for OK
+            const modal = bootstrap.Modal.getInstance(document.getElementById('modalAporte'));
+            modal.hide();
+
+            //Limpa os dados do formulario
+            document.getElementById('form-aporte').reset();
+
+            carregarAtivos();
+        } else {
+            alert("Erro ao salvar o aporte!!")
+        }
+
+    } catch (erro) {
+        console.error("Erro ao salvar o aporte:", erro);
+        alert("Falha na comunicação com o servidor.");
+    }
+}
